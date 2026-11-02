@@ -1,0 +1,13 @@
+# Entorno virtual y cachés de Python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Configuración de IDE y SO
+.vscode/
+.idea/
+.DS_Store
+
+# Archivos de datos o temporales (opcional si no deseas subir .parquet pesados)
+# data/*.parquet
