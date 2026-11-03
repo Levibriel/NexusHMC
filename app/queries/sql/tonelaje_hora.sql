@@ -1,10 +1,4 @@
-from app.core.database import get_db_connection
-from app.services.plan_service import obtener_plan_semana_y_mes
-
-
-def fetch_hourly_tonnage(target_date: str, target_shift: str):
-    query = """
-    WITH params AS (
+WITH params AS (
         SELECT %s::date AS fecha_input, %s::text AS turno_input
     ),
     shift_boundaries AS (
@@ -56,33 +50,10 @@ def fetch_hourly_tonnage(target_date: str, target_shift: str):
         sh.hora_idx, 
         sh.rango_horario, 
         COUNT(vr.cycle_id) AS total_viajes, 
-        ROUND(COALESCE(SUM(vr.toneladas), 0)::numeric, 0) AS tonelaje_real, 
-        ROUND(COALESCE(SUM(vr.toneladas_remanejo), 0)::numeric, 0) AS tonelaje_remanejo 
-    FROM shift_hours sh 
+        ROUND(COALESCE(SUM(vr.toneladas - vr.toneladas_remanejo ), 0)::numeric, 0) AS tonelaje_minado, 
+        ROUND(COALESCE(SUM(vr.toneladas_remanejo), 0)::numeric, 0) AS tonelaje_remanejo,
+        ROUND(COALESCE(SUM(vr.toneladas), 0)::numeric, 0) as tonelaje_real
+    FROM shift_hours sh
     LEFT JOIN viajes_reales vr ON vr.hora_truncada = sh.hora_inicio_intervalo 
     GROUP BY sh.hora_idx, sh.rango_horario, sh.hora_inicio_intervalo 
-    ORDER BY sh.hora_idx;
-    """
-    with get_db_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(query, (target_date, target_shift))
-            return cur.fetchall()
-
-def fetch_real_tonnage_range(fecha_inicio: str, fecha_fin: str) -> float:
-    """Consulta PostgreSQL para el tonelaje real acumulado en un rango de fechas."""
-    query = """
-    SELECT COALESCE(SUM(l.fact_float_tons_nominal), 0) AS total_ton
-    FROM public.cyclehauling c
-    JOIN public.cycleloading l ON c.id = l.fk_cycle_hauling
-    JOIN public.timemanager m ON c.id = m.id_relational
-    JOIN dimensions.equipment e ON e.dim_id_equipment = l.dim_id_equipment_loading
-    WHERE m.fact_datetime_start_time_traveling_empty >= (%s::date + TIME '08:00:00')
-      AND m.fact_datetime_start_time_traveling_empty < (%s::date + INTERVAL '1 day' + TIME '08:00:00')
-      AND e.dim_name_equipment NOT IN ('RX181','NG02');
-    """
-    with get_db_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(query, (fecha_inicio, fecha_fin))
-            row = cur.fetchone()
-            return float(row[0]) if row else 0.0
-
+    ORDER BY sh.hora_idx

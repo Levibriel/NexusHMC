@@ -1,0 +1,55 @@
+<!-- Sidebar Lateral -->
+<aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out w-64 bg-hmcDark text-slate-300 flex flex-col justify-between shadow-2xl z-40 flex-shrink-0 border-r border-slate-800">
+    <div>
+        <!-- Header Sidebar -->
+        <div class="p-4 bg-[#050e1a] border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-3 w-full">
+                <div class="h-16 w-20 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-lg border border-amber-400 flex-shrink-0">
+                    <img src="/static/img/HMC.png" alt="Minera HMC Michilla" class="h-full w-full object-contain">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h1 class="text-white font-black text-sm tracking-wide leading-tight font-sans truncate">Nexus HMC</h1>
+                    <p class="text-[10px] text-amber-400 font-bold tracking-wider uppercase font-sans">AI & Analytics</p>
+                    <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-semibold bg-blue-900/60 text-blue-300 border border-blue-700/50">Minera Michilla</span>
+                </div>
+            </div>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition md:block hidden ml-1" title="Contraer menú">
+                <i data-lucide="chevrons-left" id="sidebar-toggle-icon" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Navegación por Módulos -->
+        <div class="px-3 py-6 space-y-4">
+            <div>
+                <p class="px-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2 font-sans">Reportes Hora a Hora</p>
+                <nav class="space-y-1.5 text-xs font-semibold font-sans">
+                    <button onclick="SPA.loadView('monitoreo')" id="btn-nav-monitoreo" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg transition-all bg-hmcYellow text-hmcDark shadow-md font-sans">
+                        <i data-lucide="activity" class="w-4 h-4 text-hmcDark"></i>
+                        <span>Monitoreo Hora a Hora</span>
+                    </button>
+                    <button onclick="SPA.loadView('periodo')" id="btn-nav-periodo" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg transition-all hover:bg-slate-800 hover:text-white text-slate-300 font-sans">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <span>Consulta por Período</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Sidebar -->
+    <div class="p-3 bg-[#050e1a] border-t border-slate-800 text-xs space-y-2 font-semibold font-sans">
+        <div class="flex items-center justify-between text-[11px]">
+            <span class="text-slate-400">FMS y BD PostgreSQL</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 mr-1 bg-emerald-400 rounded-full animate-pulse"></span> Online
+            </span>
+        </div>
+        <div class="flex items-center justify-between pt-1.5 border-t border-slate-800/80">
+            <span class="text-slate-400 text-[11px]">Apariencia</span>
+            <button onclick="toggleTheme()" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg text-slate-200 text-[11px] transition border border-slate-700 font-semibold font-sans">
+                <i data-lucide="sun" id="theme-icon-sun" class="w-3 h-3 text-amber-400"></i>
+                <span id="theme-text">Oscuro</span>
+            </button>
+        </div>
+    </div>
+</aside>

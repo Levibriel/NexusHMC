@@ -149,7 +149,7 @@ async function loadShiftData() {
 
   try {
     const response = await fetch(
-      `/api/v1/sic/balance?fecha=${dateInput}&turno=${shiftInput}`
+      `/api/v1/horahora/balance?fecha=${dateInput}&turno=${shiftInput}`
     );
     if (!response.ok) throw new Error('Error consultando API SIC');
     const data = await response.json();
@@ -179,10 +179,10 @@ async function loadShiftData() {
     const elRemanejo = document.getElementById('card-remanejo-ton');
 
     if (elMinado) {
-      elMinado.textContent = fmt(k.ton_minado !== undefined ? k.ton_minado : (k.ton_real_acum - (k.ton_remanejo || 0)));
+      elMinado.textContent = fmt(k.ton_real_minado !== undefined ? k.ton_real_minado : (k.ton_real_acum - (k.ton_real_remanejo || 0)));
     }
     if (elRemanejo) {
-      elRemanejo.textContent = fmt(k.ton_remanejo || 0);
+      elRemanejo.textContent = fmt(k.ton_real_remanejo || 0);
     }
 
     // 2. Etiqueta dinámica de pie de tarjeta
@@ -260,7 +260,7 @@ async function loadShiftData() {
     await cargarTablaTransporteSIC(dateInput, shiftInput);
 
     // 6. Consulta del Estado de Flota FMS para la Tarjeta 3
-    fetch(`/api/v1/fleet/status?fecha=${dateInput}&turno=${shiftInput}`)
+    fetch(`/api/v1/horahora/fleetstatus?fecha=${dateInput}&turno=${shiftInput}`)
       .then((res) => res.json())
       .then((resFlota) => {
         if (resFlota.status === 'ok') {
@@ -583,7 +583,7 @@ async function cargarDetalleFallasFlota() {
 
   try {
     const resp = await fetch(
-      `/api/v1/fleet/status?fecha=${dateInput}&turno=${shiftInput}`
+      `/api/v1/horahora/fleetstatus?fecha=${dateInput}&turno=${shiftInput}`
     );
     const json = await resp.json();
     if (json.status === 'ok' && contFallas) {
@@ -622,7 +622,7 @@ async function cargarGraficoCaexVsTon() {
 
   try {
     const resp = await fetch(
-      `/api/v1/fleet/caex-vs-ton?fecha=${dateInput}&turno=${shiftInput}`
+      `/api/v1/horahora/caex-vs-ton?fecha=${dateInput}&turno=${shiftInput}`
     );
     const resJson = await resp.json();
     if (resJson.status !== 'ok') return;
@@ -861,7 +861,7 @@ async function cargarGraficoTimelineASARCO() {
 
   const fecha = fechaInput?.value;
   const turno = turnoInput?.value;
-  const url = `/api/v1/fleet/timeline?fecha=${fecha}&turno=${turno}`;
+  const url = `/api/v1/horahora/statustimeline?fecha=${fecha}&turno=${turno}`;
 
   try {
     const resp = await fetch(url);
@@ -1088,7 +1088,7 @@ async function cargarTablaCarguioSIC(dateInput, shiftInput) {
 
   try {
     const resp = await fetch(
-      `/api/v1/sic/carguio?fecha=${dateInput}&turno=${shiftInput}`
+      `/api/v1/horahora/carguio?fecha=${dateInput}&turno=${shiftInput}`
     );
     if (!resp.ok) {
       if (badgeSummary) badgeSummary.innerHTML = `Error HTTP ${resp.status}`;
@@ -1206,7 +1206,7 @@ async function cargarTablaTransporteSIC(dateInput, shiftInput) {
 
   try {
     const resp = await fetch(
-      `/api/v1/sic/transporte?fecha=${dateInput}&turno=${shiftInput}`
+      `/api/v1/horahora/transporte?fecha=${dateInput}&turno=${shiftInput}`
     );
     if (!resp.ok) {
       if (badgeSummary) badgeSummary.innerHTML = `Error HTTP ${resp.status}`;
